@@ -97,21 +97,21 @@ resource "azurerm_linux_web_app" "backend-web-app" {
   service_plan_id     = azurerm_service_plan.todo-asp.id
 
   app_settings = {
-    DATABASE_URL      = "postgresql://${azurerm_postgresql_flexible_server.psql-server.administrator_login}:${azurerm_postgresql_flexible_server.psql-server.administrator_password}@${azurerm_postgresql_flexible_server.psql-server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.psql-db.name}?sslmode=require"
+    # DATABASE_URL      = "postgresql://${azurerm_postgresql_flexible_server.psql-server.administrator_login}:${azurerm_postgresql_flexible_server.psql-server.administrator_password}@${azurerm_postgresql_flexible_server.psql-server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.psql-db.name}?sslmode=require"
     NODE_ENV          = "production"
     PORT              = "3000" # Default port for NestJS
-    POSTGRES_PASSWORD = azurerm_postgresql_flexible_server.psql-server.administrator_password
+    # POSTGRES_PASSWORD = azurerm_postgresql_flexible_server.psql-server.administrator_password
     POSTGRES_USER     = azurerm_postgresql_flexible_server.psql-server.administrator_login
     POSTGRES_DB       = azurerm_postgresql_flexible_server_database.psql-db.name
     POSTGRES_PORT     = "5432"
     POSTGRES_HOST     = azurerm_postgresql_flexible_server.psql-server.fqdn
   }
 
-  connection_string {
-    name = "DefaultConnection"
-    value = "postgresql://${azurerm_postgresql_flexible_server.psql-server.administrator_login}:${azurerm_postgresql_flexible_server.psql-server.administrator_password}@${azurerm_postgresql_flexible_server.psql-server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.psql-db.name}?sslmode=require"
-    type = "PostgreSQL"
-  }
+  # connection_string {
+  #   name = "DefaultConnection"
+  #   value = "postgresql://${azurerm_postgresql_flexible_server.psql-server.administrator_login}:${azurerm_postgresql_flexible_server.psql-server.administrator_password}@${azurerm_postgresql_flexible_server.psql-server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.psql-db.name}?sslmode=require"
+  #   type = "PostgreSQL"
+  # }
 
   depends_on = [azurerm_postgresql_flexible_server.psql-server]
 
