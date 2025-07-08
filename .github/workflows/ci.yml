@@ -1,0 +1,77 @@
+name: Fullstack Todo | Test CI
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: "*"
+  # pull_request:
+  #   branches: "*"
+
+jobs:
+  setup_environment:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Cache Node.js modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+  ci_frontend:
+    name: Frontend Build & Test
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build Frontend (Angular)
+        run: |
+          cd frontend
+          npm run build -- --configuration production
+
+      - name: Run Frontend tests
+        run: |
+          cd frontend
+          npm run test -- --watch=false --browsers=ChromeHeadless
+
+  ci_backend:
+    name: Backend Build & Test
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Backend dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Build Backend (NestJS)
+        run: |
+          cd backend
+          npm run build
+
+      - name: Run Backend tests
+        run: |
+          cd backend
+          npm run test

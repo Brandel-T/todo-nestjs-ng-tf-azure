@@ -1,0 +1,57 @@
+services:
+  api:
+    build:
+      context: ./backend
+      target: production
+      dockerfile: Dockerfile
+    container_name: todo_prod-api
+    image: temgoua20020/fullstack-todo-backend:latest
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - 3001:3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - app
+
+  postgres:
+    image: postgres
+    restart: always
+    container_name: todo_prod-db
+    ports:
+      - 5433:5432
+    volumes:
+      - ./backend/todo_data:/var/lib/postgresql/data
+    env_file:
+      - ./backend/.env
+    networks:
+      - app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: todo_prod-frontend
+    image: temgoua20020/fullstack-todo-web:latest
+    restart: always
+    ports:
+      - 4201:4200
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - app
+
+volumes:
+  todo_data:
+
+networks:
+  app:

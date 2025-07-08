@@ -1,0 +1,29 @@
+<div>
+  <header class="flex flex-row-reverse align-items-center justify-content-between ml-3">
+    <button mat-icon-button routerLink="/todos" (click)="backToOverview()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <h1>Add a ToDo</h1>
+  </header>
+  <form [formGroup]="todoForm" class="px-3 pb-2">
+    <mat-form-field class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+    <!-- <mat-form-field class="w-full">
+      <mat-label>Sub-tasks</mat-label>
+      <mat-select multiple formControlName="subTasks">
+        @for (topping of toppingList; track topping) {
+          <mat-option [value]="topping">{{topping}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field> -->
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button type="submit" (click)="createTodo()">Create</button>
+  </form>
+</div>

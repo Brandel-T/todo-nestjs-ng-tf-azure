@@ -1,0 +1,194 @@
+name: Fullstack Todo | Production CD
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - main
+  release:
+    types: [created, published]
+  # workflow_dispatch:
+  #   inputs:
+  #     release:
+  #       description: 'Release version'
+  #       required: true
+  #       default: 'v0.0.1'
+
+env:
+  DOCKER_HUB_IMAGE_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/fullstack-todo-backend
+  DOCKER_HUB_IMAGE_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/fullstack-todo-web
+  BACKEND_PORT: ${{ vars.BACKEND_PORT }}
+  POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
+
+jobs:
+  setup_environment:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+  build_and_test_frontend:
+    name: Frontend Build & Test
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build Frontend (Angular)
+        run: |
+          cd frontend
+          npm run build -- --configuration production
+
+      - name: Run Frontend tests
+        run: |
+          cd frontend
+          npm run test -- --watch=false --browsers=ChromeHeadless
+
+  build_and_test_backend:
+    name: Backend Build & Test
+    needs: setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Backend dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Build Backend (NestJS)
+        run: |
+          cd backend
+          npm run build
+
+      - name: Run Backend tests
+        run: |
+          cd backend
+          npm run test
+
+  # build and push to docker hub, which will trigger the deployment in azure app service
+  build_and_push_frontend:
+    name: Release Frontend Aapp
+    needs: [build_and_test_frontend, setup_environment]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker registry (Docker Hub)
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up QEMU
+        uses: docker/setup-quemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-actions@v3
+
+      - name: Build and Push to DockerHub using BuildKit
+        working-directory: frontend
+        run: |
+          docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+          --push \
+          --tag "${{ env.DOCKER_HUB_IMAGE_FRONTEND }}:${{ needs.setup_environment.outputs.release-version }}" \
+          --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache \
+          .
+
+  build_and_push_backend:
+    name: Release Backend App
+    needs: [build_and_test_backend, setup_environment]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker registry (Docker Hub)
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-actions@v3
+
+      - name: Build and push Backend image
+        working-directory: backend
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --push \
+            --tag ${{ env.DOCKER_HUB_IMAGE_BACKEND }}:${{ needs.setup_environment.outputs.release-version }} \
+            --tag ${{ env.DOCKER_HUB_IMAGE_BACKEND }}:latest \
+            --build-arg PORT=${{ vars.BACKEND_PORT }} \
+            --build-arg NODE_ENV=${{ vars.NODE_ENV }} \
+            --build-arg POSTGRES_HOST=${{ vars.POSTGRES_HOST }} \
+            --build-arg POSTGRES_PORT=${{ vars.POSTGRES_PORT }} \
+            --build-arg POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+            --build-arg POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+            --build-arg POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
+            .
+
+      # # if: github.event_name == 'release'
+      # # run: |
+      # #   # Deployment logic here (Kubernetes, ECS, etc.)
+      # #   echo "Deploying version ${{ needs.setup_environment.outputs.release-version }}"
+      # - name: Deploy to production
+      #   uses: azure/login@v2
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # - name: Deploy to Azure App Service
+      #   uses: azure/webapps-container-deploy@v2
+      #   with:
+      #     app-name: ${{ vars.AZURE_APP_NAME }}
+      #     images: ${{ env.DOCKER_HUB_IMAGE_BACKEND }}:${{ needs.build_and_test_backend.outputs.image-tag }}
+      #     configuration-file: .azure/appsettings.json
+
+      # - name: Update App Settings
+      #   uses: azure/appservice-settings@v2
+      #   with:
+      #     app-name: ${{ vars.AZURE_APP_NAME }}
+      #     app-settings-json: |
+      #       {
+      #         "WEBSITES_PORT": "3000",
+      #         "DOCKER_REGISTRY_SERVER_URL": "https://index.docker.io",
+      #         "POSTGRES_HOST": "${{ vars.POSTGRES_HOST }}",
+      #         "POSTGRES_PORT": "${{ vars.POSTGRES_PORT }}",
+      #         "POSTGRES_USER": "${{ vars.POSTGRES_USER }}",
+      #         "POSTGRES_PASSWORD": "${{ secrets.POSTGRES_PASSWORD }}",
+      #         "POSTGRES_DB": "${{ vars.POSTGRES_DB }}"
+      #       }
+
+      # - name: Restart App Service
+      #   run: |
+      #     az webapp restart --name ${{ vars.AZURE_APP_NAME }} \
+      #       --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }}

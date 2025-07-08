@@ -1,0 +1,55 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+      dockerfile: Dockerfile
+    container_name: todo_frontend
+    restart: always
+    ports:
+      - 4200:4200
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - app
+
+  api:
+    build:
+      context: ./backend
+      target: development
+      dockerfile: Dockerfile
+    container_name: todo_api
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - app
+
+  postgres:
+    image: postgres
+    restart: always
+    container_name: todo_db
+    ports:
+      - 5432:5432
+    volumes:
+      - ./backend/todo_data:/var/lib/postgresql/data
+    env_file:
+      - ./backend/.env
+    networks:
+      - app
+
+volumes:
+  todo_data:
+
+networks:
+  app:

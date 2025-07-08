@@ -1,0 +1,6 @@
+subscription_id = "value-of-your-azure-subscription-id"
+administrator_login = "your-postgres-admin-username"
+administrator_password = "your-postgres-admin-password"
+environment = "dev"
+location = "West Europe"
+app_service_sku = "B1"

@@ -1,0 +1,13 @@
+<div class="flex">
+  <mat-checkbox [(ngModel)]="todo().done" (change)="onMarkDone()" class="flex-1">
+    <span [class.line-through]="todo().done">{{ todo().name }}</span>
+  </mat-checkbox>
+  <span class="w-fit ml-auto">
+    <button mat-icon-button [routerLink]="['', { outlets: { aside: ['todos', 'edit', todo().id] } }]">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="openDeleteDialog()">
+      <mat-icon class="text-red-500">delete</mat-icon>
+    </button>
+  </span>
+</div>

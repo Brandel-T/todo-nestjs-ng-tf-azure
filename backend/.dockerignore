@@ -1,0 +1,13 @@
+Dockerfile
+.dockerignore 
+node_modules 
+npm-debug.log 
+*.md
+.env.example
+.git
+
+# code documentation with compodoc
+/documentation
+
+# postgres volumne data
+/todo_data

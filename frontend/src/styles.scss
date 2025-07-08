@@ -1,0 +1,14 @@
+@use 'primeflex/primeflex' as *;
+@import "primeflex/primeflex.css";
+@import "primeflex/themes/primeone-light.css";
+
+html, body { height: 100%; margin: 0; padding: 0; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+* { box-sizing: border-box; }
+
+
+// PrimeFlex custom css classes
+.container {
+  width: min(90%, 55rem);
+  @include styleclass('flex-1 mx-auto');
+}
