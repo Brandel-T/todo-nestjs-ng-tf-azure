@@ -17,16 +17,6 @@ import { config, validationSchema } from './common/config';
       envFilePath: ['.env'],
       ignoreEnvFile: process.env.NODE_ENV === 'production',
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: process.env.POSTGRES_HOST || 'localhost',
-    //   port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-    //   username: process.env.POSTGRES_USER,
-    //   password: process.env.POSTGRES_PASSWORD,
-    //   database: process.env.POSTGRES_DB,
-    //   autoLoadEntities: true,
-    //   synchronize: process.env.NODE_ENV === 'development',
-    // }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({

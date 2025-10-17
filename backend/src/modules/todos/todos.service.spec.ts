@@ -5,7 +5,6 @@ import { TodosService } from './todos.service';
 import { Todo } from './entities/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { NotFoundException } from '@nestjs/common';
 
 describe('TodosService', () => {
   let service: TodosService;
