@@ -29,6 +29,11 @@ import { config, validationSchema } from './common/config';
         entities: [Todo],
         autoLoadEntities: true,
         synchronize: configService.get<string>('NODE_ENV') == 'development',
+        ssl:
+          configService.get<string>('POSTGRES_SSL') === 'true'
+            ? { rejectUnauthorized: false }
+            : false,
+        logging: configService.get<string>('NODE_ENV') === 'development',
       }),
     }),
     TodosModule,
