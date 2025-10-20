@@ -36,6 +36,7 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
+          npm install -g @nestjs/cli
           npm run build --if-present
           npm run test --if-present
 
