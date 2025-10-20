@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiURI: 'http://localhost:3000/api', // TODO: change to https
+  apiURI: 'todo-backend-abd5gyaqfvbfg5c2.westeurope-01.azurewebsites.net/api',
 };
