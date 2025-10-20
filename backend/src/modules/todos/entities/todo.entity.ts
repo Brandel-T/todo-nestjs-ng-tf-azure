@@ -14,6 +14,6 @@ export class Todo {
   @Column({ default: false })
   done: boolean;
 
-  @OneToMany((type) => Todo, (todo) => todo.id)
+  @OneToMany(() => Todo, (todo) => todo.id)
   subTasks?: Todo[];
 }
