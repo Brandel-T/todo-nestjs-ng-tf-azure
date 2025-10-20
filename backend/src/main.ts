@@ -21,10 +21,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: [
-      'http://localhost:4200',
-      'https://todo-frontend-webapp.azurewebsites.net',
-    ],
+    origin: ['*.azurestaticapps.net', 'http://localhost:4200'],
     methods: 'GET, PUT, POST, DELETE',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept',
