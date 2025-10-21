@@ -91,5 +91,4 @@ jobs:
           app-name: 'todo-backend'
           slot-name: 'Production'
           package: ./app
-          clean: true
-
+          
