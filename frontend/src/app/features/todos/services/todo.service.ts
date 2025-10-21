@@ -7,13 +7,7 @@ import { switchMap } from "rxjs";
 export class TodoService {
   todoApi = inject(TodoApiService)
 
-  private todos = signal<Todo[]>([{
-    done: false,
-    name: "test",
-    description: "dknfdhgp",
-    id: "1",
-    subTasks: [],
-  }])
+  private todos = signal<Todo[]>([])
 
   getTodoList = computed(() => this.todos())
   todoList = signal<Todo[]>([])

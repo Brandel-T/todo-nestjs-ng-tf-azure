@@ -5,6 +5,12 @@
         @if (!todo.done) {
           <todo-item [todo]="todo"></todo-item>
         }
+      } @empty {
+        <div class="flex flex-column items-center justify-center gap-2 p-6 text-center text-gray-500">
+          <mat-icon aria-hidden="true" class="text-4xl">inbox</mat-icon>
+          <div class="text-lg">No pending tasks</div>
+          <div class="text-sm">Click "Add a ToDo Item" to create one.</div>
+        </div>
       }
     </mat-tab>
     <mat-tab label="Done">
@@ -12,6 +18,12 @@
         @if (doneTask.done) {
           <todo-item [todo]="doneTask"></todo-item>
         }
+      } @empty {
+        <div class="flex flex-column items-center justify-center gap-2 p-6 text-center text-gray-500">
+          <mat-icon aria-hidden="true" class="text-4xl">inbox</mat-icon>
+          <div class="text-lg">No done tasks</div>
+          <div class="text-sm">Click "Add a ToDo Item" to create one.</div>
+        </div>
       }
     </mat-tab>
   </mat-tab-group>
