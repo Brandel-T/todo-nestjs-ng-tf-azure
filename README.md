@@ -144,7 +144,7 @@ Example of configuration is as below:
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": [
-      "**/*.{css, scss, js}"
+      "/*.{css, scss, js}"
     ]
   }
 }
