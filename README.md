@@ -113,6 +113,8 @@ terraform plan -destroy -out main.destroy.tfplan
 
 ## Key takeaways
 
+### Networking, TypeORM and Azure PostgreSQL
+
 - When you deploy a TypeORM app to production, always use migrations to sync your database schema. DB relations are not created automatically in production mode.
 - Make sure to set the `synchronize` option to `false` (in `app.module.ts`) in production environment. Otherwise it will destroy and recreate your database schema on every app restart, leading to data loss.
 - Azure does not create your database for you. You need to create it manually or via a script after deploying your infrastructure.
@@ -121,3 +123,23 @@ terraform plan -destroy -out main.destroy.tfplan
   2. Either (i) allow all Azure services to access the server *(Not recommended in Production environment)* or (ii) add the outbound IP addresses of your App Service to the PostgreSQL server firewall rules.
 - If possible, use Managed Identity to connect your App Service to the database securely without using username/password.
 - it's a good practice to encapsulate services under a VNet and subnets for better security.
+
+### Static webapp config
+
+The `staticwebapp.config.json` file in the frontend/src folder is used to configure routing and other settings for Azure Static Web Apps. In this case, it specifies a navigation fallback to `index.html`, which is useful for single-page applications (SPAs) like those built with Angular. This ensures that when a user navigates to a route that doesn't correspond to a physical file, the app will still load correctly by serving `index.html`.
+
+⚠️ All of this because the routing is only known by the frontend app, not by the server. 
+
+Example of configuration is as below:
+
+```json
+# src/staticwebapp.config.json
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "**/*.{css, scss, js}"
+    ]
+  }
+}
+```
