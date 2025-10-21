@@ -1,12 +1,20 @@
-<div class="">
-  <mat-toolbar>
-    <h1 routerLink="/" class="mx-auto text-2xl font-bold cursor-pointer">Fullstack ToDo</h1>
+<div class="bg-cyan-50 h-full">
+  <mat-toolbar class="flex flex-column gap-0 py-2 shadow-3">
+    <h1 routerLink="/" class="mx-auto text-2xl font-bold cursor-pointer mb-0">Fullstack ToDo</h1>
+    <p class="text-xs my-0 text-500">
+      View code on
+      <a
+        class="no-underline"
+        target="_blank"
+        href="https://github.com/Brandel-T/todo-nestjs-ng-tf-azure"
+      >GitHub</a>.
+    </p>
   </mat-toolbar>
-  <div class="mt-4 container flex gap-4">
-    <main class="shadow-2 rounded-lg surface-50 flex-1 border-round-md">
+  <div class="mt-4 container flex flex-wrap gap-4">
+    <main class="main-content flex-1 shadow-2 rounded-lg surface-50 border-round-md">
       <router-outlet />
     </main>
-    <aside class="shadow-2 surface-50 max-w-20rem border-round-md transition-all transition-duration-200 transition-ease-in-out">
+    <aside class="flex-1 shadow-2 surface-50 border-round-md transition-all transition-duration-200 transition-ease-in-out">
       <router-outlet name="aside" />
     </aside>
   </div>

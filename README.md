@@ -128,7 +128,7 @@ terraform plan -destroy -out main.destroy.tfplan
 
 The `staticwebapp.config.json` file in the frontend/src folder is used to configure routing and other settings for Azure Static Web Apps. In this case, it specifies a navigation fallback to `index.html`, which is useful for single-page applications (SPAs) like those built with Angular. This ensures that when a user navigates to a route that doesn't correspond to a physical file, the app will still load correctly by serving `index.html`.
 
-⚠️ All of this because the routing is only known by the frontend app, not by the server. 
+⚠️ All of this because the routing is only known by the frontend app, not by the server.
 
 Example of configuration is as below:
 

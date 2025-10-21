@@ -58,6 +58,7 @@ export class AddTodoComponent {
 
   onCancel() {
     this.resetForm()
+    this.backToOverview()
   }
 
   private resetForm() {

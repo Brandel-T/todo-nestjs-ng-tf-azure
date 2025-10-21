@@ -31,8 +31,6 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('api');
 
-  console.log(`API and documentation available on port: ${port}`);
-
   await app.listen(port ?? 3000);
 }
 bootstrap();

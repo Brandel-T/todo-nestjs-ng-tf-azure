@@ -32,9 +32,7 @@ export class CustomComponentComponent {
   onMarkDone() {
     if (this.todo().id) {
       this.todoService.updateTodo(this.todo().id!, {...this.todo()}).subscribe({
-        next: (value) => {
-          console.log(value);
-        }
+        next: (_value) => {}
       });
     }
   }
