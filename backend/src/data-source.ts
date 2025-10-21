@@ -14,6 +14,6 @@ export const AppDataSource = new DataSource({
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   ssl:
     process.env.POSTGRES_SSL === 'true' ? { rejectUnauthorized: false } : false,
-  synchronize: false,
+  synchronize: true,
   logging: true,
 });
