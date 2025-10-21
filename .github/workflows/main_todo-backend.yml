@@ -56,8 +56,6 @@ jobs:
           cp package*.json deploy/
           cd deploy
           npm ci --omit=dev
-          echo "=== Files to be deployed ==="
-          ls -laR
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -85,11 +83,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_07050C1823A943BCA3294705459E8CCE }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_68BE64B843314BEFA8BB76F1EDCDF827 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8DDEE5624FAC47198B75C646D687BA15 }}
-        
-      - name: Debug - Show downloaded files
-        run: |
-          echo "=== Downloaded artifact contents ==="
-          ls -laR ./app
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
