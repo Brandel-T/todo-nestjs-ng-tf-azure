@@ -1,15 +1,21 @@
-[![Fullstack Todo | Test CI](https://github.com/Brandel-T/fullstack-nestjs-ng-azure-tf/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Brandel-T/fullstack-nestjs-ng-azure-tf/actions/workflows/ci.yml)
+[![Fullstack Todo | Test CI](https://github.com/Brandel-T/todo-nestjs-ng-tf-azure/actions/workflows/ci.yml/badge.svg)](https://github.com/Brandel-T/todo-nestjs-ng-tf-azure/actions/workflows/ci.yml)
+
+[![Build and deploy NestJS app to Azure Web App - todo-backend](https://github.com/Brandel-T/todo-nestjs-ng-tf-azure/actions/workflows/main_todo-backend.yml/badge.svg)](https://github.com/Brandel-T/todo-nestjs-ng-tf-azure/actions/workflows/main_todo-backend.yml)
+
+[![Azure Static Web Apps CI/CD](https://github.com/Brandel-T/todo-nestjs-ng-tf-azure/actions/workflows/azure-static-web-apps-nice-wave-049b5d303.yml/badge.svg)](https://github.com/Brandel-T/todo-nestjs-ng-tf-azure/actions/workflows/azure-static-web-apps-nice-wave-049b5d303.yml)
 
 # fullstack-nestjs-ng-azure-tf
 
 A full-stack application from design to deployment on Azure, including IaC via Terraform.
 
-This a fullstack project repos with:
+🎯 My goal with this project was not about having a complex app, but rather to demonstrate the end-to-end process of building, containerizing, and deploying a full-stack application using modern technologies and best practices.
+
+🏗️ This a fullstack project repos with:
 
 - [`/backend`](/backend/): containing the backend project, and
 - [`/frontend`](/frontend/): containing the frontend
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 This hands-on app supports:
 
@@ -21,7 +27,7 @@ This hands-on app supports:
 - [x] **Azure**: to host the infrastructure/app
 - [x] **CMake**
 
-## Get Started
+## 🚀 Get Started
 
 ### Using Docker
 
