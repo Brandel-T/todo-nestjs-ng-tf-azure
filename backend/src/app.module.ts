@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { config, validationSchema } from '@common/config';
 import { AppDataSource } from './data-source';
 import { AuthModule } from '@modules/auth/auth.module';
+import { UserModule } from '@modules/users/users.module';
 
 @Module({
   imports: [
@@ -18,8 +19,9 @@ import { AuthModule } from '@modules/auth/auth.module';
       envFilePath: ['.env'],
       ignoreEnvFile: process.env.NODE_ENV === 'production',
     }),
-    TypeOrmModule.forRoot(AppDataSource.options),
+    TypeOrmModule.forRoot({ ...AppDataSource.options, autoLoadEntities: true }),
     TodosModule,
+    UserModule,
     AuthModule,
   ],
   controllers: [AppController],

@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from '@modules/users/entities/users.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class Todo {
@@ -16,4 +24,7 @@ export class Todo {
 
   @OneToMany(() => Todo, (todo) => todo.id)
   subTasks?: Todo[];
+
+  @ManyToOne(() => User, (user) => user.todos)
+  author?: User;
 }

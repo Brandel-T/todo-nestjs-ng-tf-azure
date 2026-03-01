@@ -1,4 +1,3 @@
-// backend/src/auth/auth.controller.ts
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { GoogleAuthGuard } from './google.guard';
 import { ApiTags } from '@nestjs/swagger';
