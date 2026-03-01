@@ -5,8 +5,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodosModule } from './modules/todos/todos.module';
 import { ConfigModule } from '@nestjs/config';
-import { config, validationSchema } from './common/config';
+import { config, validationSchema } from '@common/config';
 import { AppDataSource } from './data-source';
+import { AuthModule } from '@modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AppDataSource } from './data-source';
     }),
     TypeOrmModule.forRoot(AppDataSource.options),
     TodosModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
